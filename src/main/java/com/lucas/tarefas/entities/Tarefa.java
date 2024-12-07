@@ -1,13 +1,28 @@
 package com.lucas.tarefas.entities;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.lucas.tarefas.entities.enums.Status;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
+@Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Tarefa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String nome;
+    private String titulo;
+    private String descricao;
+    private Status status = Status.ACTIVE;
+    private LocalDate data_vencimento;
+
+    @ManyToOne
+    @JoinColumn(name = "categoria_id")
+    private Categoria categoria;
 }
