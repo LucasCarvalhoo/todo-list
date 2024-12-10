@@ -1,11 +1,8 @@
 package com.lucas.tarefas.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -17,7 +14,8 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String nome;
+    @Column(name = "nome")
+    private String name;
     private String email;
     private String senha;
 
