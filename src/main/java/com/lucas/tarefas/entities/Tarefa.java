@@ -22,7 +22,7 @@ public class Tarefa {
     private Status status = Status.ACTIVE;
     private LocalDate data_vencimento;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
 }
