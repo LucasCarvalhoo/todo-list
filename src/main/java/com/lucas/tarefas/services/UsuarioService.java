@@ -1,6 +1,7 @@
 package com.lucas.tarefas.services;
 
 import com.lucas.tarefas.Repository.UsuarioRepository;
+import com.lucas.tarefas.entities.Categoria;
 import com.lucas.tarefas.entities.Usuario;
 import com.lucas.tarefas.exception.RecordNotFoundException;
 import jakarta.validation.constraints.NotBlank;
@@ -19,16 +20,18 @@ public class UsuarioService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public Optional<Usuario> findById(@Positive Long id){
-        return Optional.ofNullable(usuarioRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException(id)));
+    public Optional<Usuario> findById(Long id){
+        return usuarioRepository.findById(id);
     }
 
     public Optional<Usuario> findByName(@NotBlank String name){
         return usuarioRepository.findByName(name);
     }
 
-    public Usuario criarUsuario(@Valid Usuario usuario){
+    public Usuario criarUsuario(Usuario usuario){
+        for (Categoria categoria : usuario.getCategorias()) {
+            categoria.setUsuario(usuario);
+        }
         return usuarioRepository.save(usuario);
     }
 
