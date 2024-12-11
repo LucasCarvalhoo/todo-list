@@ -7,16 +7,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/usuario")
+@RequestMapping("usuarios")
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
 
     public UsuarioController(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
+    }
+
+    @GetMapping
+    public List<Usuario> list(){
+        return usuarioService.list();
     }
 
     @GetMapping("/{id}")
@@ -30,5 +36,15 @@ public class UsuarioController {
     @ResponseStatus(code = HttpStatus.CREATED)
     public Usuario criarUsuario(@RequestBody @Valid Usuario usuario){
         return usuarioService.criarUsuario(usuario);
+    }
+
+    @PutMapping
+    public Usuario atualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuario){
+        return usuarioService.utualizarUsuario(id, usuario);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deletarUsuario(@PathVariable Long id){
+        usuarioService.deletarUsuario(id);
     }
 }
