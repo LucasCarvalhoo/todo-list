@@ -3,12 +3,12 @@ package com.lucas.tarefas.services;
 import com.lucas.tarefas.Repository.UsuarioRepository;
 import com.lucas.tarefas.entities.Categoria;
 import com.lucas.tarefas.entities.Usuario;
-import com.lucas.tarefas.exception.RecordNotFoundException;
+import com.lucas.tarefas.exception.UsuarioNaoEncontradoException;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import org.springframework.stereotype.Service;
-import jakarta.validation.Valid;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,6 +18,10 @@ public class UsuarioService {
 
     public UsuarioService(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
+    }
+
+    public List<Usuario> list(){
+        return usuarioRepository.findAll();
     }
 
     public Optional<Usuario> findById(Long id){
@@ -55,6 +59,11 @@ public class UsuarioService {
                         recordFound.setCategorias(usuario.getCategorias());
                     }
                     return usuarioRepository.save(recordFound);
-                }).orElseThrow(() -> new RecordNotFoundException(id));
+                }).orElseThrow(() -> new UsuarioNaoEncontradoException(id));
+    }
+
+    public void deletarUsuario(@Positive Long id){
+        usuarioRepository.delete(usuarioRepository.findById(id)
+                .orElseThrow(() -> new UsuarioNaoEncontradoException(id)));
     }
 }
