@@ -1,5 +1,6 @@
 package com.lucas.tarefas.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lucas.tarefas.entities.enums.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,9 +25,11 @@ public class Tarefa {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_id")
+    @JsonIgnore
     private Categoria categoria;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id")
+    @JsonIgnore
     private Usuario usuario;
 }
