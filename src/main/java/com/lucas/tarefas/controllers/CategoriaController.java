@@ -40,7 +40,7 @@ public class CategoriaController {
         return categoriaService.utualizarCategorias(categoria, categoriaId);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public void deletarCategorias(@PathVariable Long id){
         categoriaService.deletarCategorias(id);
     }
