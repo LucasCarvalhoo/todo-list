@@ -25,6 +25,9 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Categoria> categorias;
 
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Tarefa> tarefas;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

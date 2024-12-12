@@ -63,7 +63,6 @@ public class UsuarioService {
     }
 
     public void deletarUsuario(@Positive Long id){
-        usuarioRepository.delete(usuarioRepository.findById(id)
-                .orElseThrow(() -> new UsuarioNaoEncontradoException(id)));
+        usuarioRepository.deleteById(id);
     }
 }
