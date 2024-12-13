@@ -1,7 +1,8 @@
 package com.lucas.tarefas.services;
 
+import com.lucas.tarefas.Repository.CategoriaRepository;
+import com.lucas.tarefas.Repository.TarefaRepository;
 import com.lucas.tarefas.Repository.UsuarioRepository;
-import com.lucas.tarefas.entities.Categoria;
 import com.lucas.tarefas.entities.Usuario;
 import com.lucas.tarefas.exception.UsuarioNaoEncontradoException;
 import jakarta.validation.constraints.NotBlank;
@@ -33,9 +34,6 @@ public class UsuarioService {
     }
 
     public Usuario criarUsuario(Usuario usuario){
-        for (Categoria categoria : usuario.getCategorias()) {
-            categoria.setUsuario(usuario);
-        }
         return usuarioRepository.save(usuario);
     }
 

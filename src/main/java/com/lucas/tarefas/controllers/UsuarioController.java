@@ -34,8 +34,9 @@ public class UsuarioController {
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public Usuario criarUsuario(@RequestBody @Valid Usuario usuario){
-        return usuarioService.criarUsuario(usuario);
+    public ResponseEntity<Usuario> criarUsuario(@RequestBody @Valid Usuario usuario){
+        Usuario savedUsuario = usuarioService.criarUsuario(usuario);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUsuario);
     }
 
     @PutMapping
