@@ -33,10 +33,6 @@ public class UsuarioService {
         return usuarioRepository.findByName(name);
     }
 
-    public Usuario criarUsuario(Usuario usuario){
-        return usuarioRepository.save(usuario);
-    }
-
     public Usuario utualizarUsuario(@Positive Long id, Usuario usuario){
         return usuarioRepository.findById(id)
                 .map(recordFound -> {
