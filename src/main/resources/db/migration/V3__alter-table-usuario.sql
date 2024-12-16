@@ -1,0 +1,3 @@
+UPDATE usuario SET role = 'USER';
+
+ALTER TABLE usuario ALTER COLUMN role SET NOT NULL;
