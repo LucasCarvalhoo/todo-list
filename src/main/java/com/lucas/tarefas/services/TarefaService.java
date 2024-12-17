@@ -40,7 +40,7 @@ public class TarefaService {
         return tarefaRepository.findById(id);
     }
 
-    public Tarefa salvarTarefa(Tarefa tarefa, Long usuarioId, Long categoriaId){
+    public Tarefa salvarTarefa(Tarefa tarefa, Long usuarioId, Long categoriaId, Long usuarioAutenticadoId){
         if(tarefa.getTitulo() == null){
             throw new TarefaNaoCriadaException("Tarefa sem titulo");
         }
@@ -59,8 +59,8 @@ public class TarefaService {
         Categoria categoria = categoriaRepository.findById(categoriaId)
                 .orElseThrow(() -> new RuntimeException("Categoria não encontrada com o ID: " + categoriaId));
 
-        if (!categoria.getUsuario().getId().equals(usuarioId)) {
-            throw new IllegalArgumentException("A categoria informada não pertence ao usuário especificado.");
+        if (!categoria.getUsuario().getId().equals(usuarioId) && !usuarioAutenticadoId.equals(usuarioId)) {
+            throw new IllegalArgumentException("O usuário não pode acessar a categoria ou tarefa.");
         }
 
         tarefa.setUsuario(usuario);
@@ -68,6 +68,7 @@ public class TarefaService {
 
         return tarefaRepository.save(tarefa);
     }
+
 
     public Tarefa atualizarTarefa(Tarefa tarefa, Long tarefaId){
         return tarefaRepository.findById(tarefaId)
@@ -87,5 +88,11 @@ public class TarefaService {
 
     public void deletarTarefa(Long tarefaId){
         tarefaRepository.deleteById(tarefaId);
+    }
+
+    public boolean isOwner(Long tarefaId, Long userId) {
+        Tarefa tarefa = buscarTarefaPorId(tarefaId)
+                .orElseThrow(() -> new RuntimeException("Tarefa não encontrada"));
+        return tarefa.getUsuario().getId().equals(userId);
     }
 }
