@@ -2,8 +2,10 @@ package com.lucas.tarefas.controllers;
 
 import com.lucas.tarefas.Repository.UsuarioRepository;
 import com.lucas.tarefas.entities.DTO.AuthenticationDTO;
+import com.lucas.tarefas.entities.DTO.LoginResponseDTO;
 import com.lucas.tarefas.entities.DTO.RegisterDTO;
 import com.lucas.tarefas.entities.Usuario;
+import com.lucas.tarefas.infra.security.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +27,17 @@ public class AuthenticationController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO dto){
         var usernamePassword = new UsernamePasswordAuthenticationToken(dto.email(), dto.senha());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        return ResponseEntity.ok().build();
+        var token = tokenService.generateToken((Usuario) auth.getPrincipal());
+
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
     @PostMapping("/register")
@@ -38,7 +45,7 @@ public class AuthenticationController {
         if(this.usuarioRepository.findByEmail(dto.email()) != null) return ResponseEntity.badRequest().build();
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(dto.senha());
-        Usuario newUser = new Usuario(dto.email(), encryptedPassword, dto.role());
+        Usuario newUser = new Usuario(dto.name(), dto.email(), encryptedPassword, dto.role());
 
         this.usuarioRepository.save(newUser);
 

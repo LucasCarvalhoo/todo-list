@@ -37,7 +37,8 @@ public class Usuario implements UserDetails {
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Tarefa> tarefas;
 
-    public Usuario(String email, String senha, Roles role){
+    public Usuario(String name,String email, String senha, Roles role){
+        this.name = name;
         this.email = email;
         this.senha = senha;
         this.role = role;
@@ -64,12 +65,12 @@ public class Usuario implements UserDetails {
 
     @Override
     public String getPassword() {
-        return "";
+        return senha;
     }
 
     @Override
     public String getUsername() {
-        return name;
+        return email;
     }
 
     @Override
