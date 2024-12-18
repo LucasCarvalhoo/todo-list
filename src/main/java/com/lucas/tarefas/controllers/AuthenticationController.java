@@ -5,6 +5,7 @@ import com.lucas.tarefas.entities.DTO.AuthenticationDTO;
 import com.lucas.tarefas.entities.DTO.LoginResponseDTO;
 import com.lucas.tarefas.entities.DTO.RegisterDTO;
 import com.lucas.tarefas.entities.Usuario;
+import com.lucas.tarefas.exception.EmailJaCadastradoException;
 import com.lucas.tarefas.infra.security.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,9 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterDTO dto){
-        if(this.usuarioRepository.findByEmail(dto.email()) != null) return ResponseEntity.badRequest().build();
+        if(this.usuarioRepository.findByEmail(dto.email()) != null) {
+            throw new EmailJaCadastradoException("Este email já está registrado.");
+        }
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(dto.senha());
         Usuario newUser = new Usuario(dto.name(), dto.email(), encryptedPassword, dto.role());
