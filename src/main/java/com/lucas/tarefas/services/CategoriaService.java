@@ -9,6 +9,7 @@ import com.lucas.tarefas.exception.CategoriaNaoEncontradaException;
 import com.lucas.tarefas.exception.UsuarioNaoEncontradoException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,16 +35,22 @@ public class CategoriaService {
         return categoriaRepository.findByUsuarioId(usuarioId);
     }
 
-    public Categoria criarCategoria(Categoria categoria, Long usuarioId){
+    public Categoria criarCategoria(Categoria categoria, Long usuarioId, Usuario usuarioLogado){
         if (categoria.getNome() == null) {
             throw new CategoriaNaoCriadaException("Nome da categoria está nulo.");
         }
+
+        if (!usuarioId.equals(usuarioLogado.getId())) {
+            throw new CategoriaNaoCriadaException("Usuário não tem permissão para criar categoria para outro usuário.");
+        }
+
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
 
         categoria.setUsuario(usuario);
         usuario.getCategorias().add(categoria);
         return categoriaRepository.save(categoria);
+
     }
 
     public Categoria utualizarCategorias(Categoria categoria, Long categoriaId){

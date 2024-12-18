@@ -1,6 +1,8 @@
 package com.lucas.tarefas.controllers;
 
+import com.lucas.tarefas.Repository.UsuarioRepository;
 import com.lucas.tarefas.entities.Tarefa;
+import com.lucas.tarefas.entities.Usuario;
 import com.lucas.tarefas.services.TarefaService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,10 +17,12 @@ import java.util.Optional;
 public class TarefaController {
 
     private final TarefaService tarefaService;
+    private final UsuarioRepository usuarioRepository;
 
 
-    public TarefaController(TarefaService tarefaService) {
+    public TarefaController(TarefaService tarefaService, UsuarioRepository usuarioRepository) {
         this.tarefaService = tarefaService;
+        this.usuarioRepository = usuarioRepository;
     }
 
     @GetMapping
@@ -42,7 +46,7 @@ public class TarefaController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN') or #usuarioId == principal.id")
     public Tarefa salvarTarefa(@RequestBody Tarefa tarefa, @RequestParam Long usuarioId, @RequestParam Long categoriaId, @AuthenticationPrincipal UserDetails userDetails){
-        Long usuarioAutenticadoId = Long.parseLong(userDetails.getUsername()); // Supondo que o username seja o ID do usuário
+        Long usuarioAutenticadoId = Long.parseLong(userDetails.getUsername());
         return tarefaService.salvarTarefa(tarefa, usuarioId, categoriaId, usuarioAutenticadoId);
     }
 
