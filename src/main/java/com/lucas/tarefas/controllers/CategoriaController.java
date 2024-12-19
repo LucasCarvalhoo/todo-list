@@ -31,8 +31,8 @@ public class CategoriaController {
 
     @GetMapping("/usuarios/{usuarioId}")
     @PreAuthorize("#usuarioId == principal.id")
-    public ResponseEntity<List<Categoria>> listarCategorias(@PathVariable Long usuarioId){
-        List<Categoria> categorias = categoriaService.listarCategoriaPorUsuario(usuarioId);
+    public ResponseEntity<List<Categoria>> listarCategorias(@PathVariable Long usuarioId, @AuthenticationPrincipal Usuario usuarioLogado){
+        List<Categoria> categorias = categoriaService.listarCategoriaPorUsuario(usuarioId, usuarioLogado);
         return ResponseEntity.ok(categorias);
     }
 
@@ -45,8 +45,8 @@ public class CategoriaController {
 
     @PutMapping
     @PreAuthorize("#usuarioId == principal.id")
-    public Categoria atualizarCategorias(@RequestBody Categoria categoria, @RequestParam Long categoriaId){
-        return categoriaService.utualizarCategorias(categoria, categoriaId);
+    public Categoria atualizarCategorias(@RequestBody Categoria categoria, @RequestParam Long usuarioId, @RequestParam Long categoriaId, @AuthenticationPrincipal Usuario usuarioLogado){
+        return categoriaService.utualizarCategorias(categoria, usuarioId, categoriaId, usuarioLogado);
     }
 
     @DeleteMapping("/{id}")

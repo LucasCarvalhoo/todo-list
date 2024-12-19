@@ -31,7 +31,11 @@ public class CategoriaService {
         return categoriaRepository.findAll();
     }
 
-    public List<Categoria> listarCategoriaPorUsuario(Long usuarioId){
+    public List<Categoria> listarCategoriaPorUsuario(Long usuarioId, Usuario usuarioLogado){
+        if(!usuarioId.equals(usuarioLogado.getId())){
+            throw new CategoriaNaoEncontradaException("Usuário não tem permissão.");
+        }
+
         return categoriaRepository.findByUsuarioId(usuarioId);
     }
 
@@ -53,7 +57,11 @@ public class CategoriaService {
 
     }
 
-    public Categoria utualizarCategorias(Categoria categoria, Long categoriaId){
+    public Categoria utualizarCategorias(Categoria categoria, Long usuarioId, Long categoriaId, Usuario usuarioLogado){
+        if(!usuarioId.equals(usuarioLogado.getId())){
+            throw new CategoriaNaoEncontradaException("Usuário não tem permissão.");
+        }
+
         return categoriaRepository.findById(categoriaId)
                 .map(recordFound -> {
                     recordFound.setNome(categoria.getNome());
