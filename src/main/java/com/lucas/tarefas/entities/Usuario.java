@@ -1,10 +1,11 @@
 package com.lucas.tarefas.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.lucas.tarefas.entities.DTO.UsuarioDTO;
 import com.lucas.tarefas.entities.enums.Roles;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -38,6 +39,13 @@ public class Usuario implements UserDetails {
     private Set<Tarefa> tarefas;
 
     public Usuario(String name,String email, String senha, Roles role){
+        this.name = name;
+        this.email = email;
+        this.senha = senha;
+        this.role = role;
+    }
+
+    public Usuario(UsuarioDTO data) {
         this.name = name;
         this.email = email;
         this.senha = senha;
